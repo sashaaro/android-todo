@@ -25,12 +25,13 @@ public class AddActivity extends
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+
         ImageButton backButton = (ImageButton) findViewById(R.id.back_button);
-        TextView headTextView = (TextView) findViewById(R.id.todoSeparator);
+        //TextView headTextView = (TextView) findViewById(R.id.todoSeparator);
         //ListView projectsListView = (ListView) findViewById(R.id.projects_list);
         Spinner projectsSpinnerView = (Spinner) findViewById(R.id.projects_spinner);
 
-        headTextView.setText("Задача");
+        //headTextView.setText("Задача");
 
         final Activity activity = this;
         backButton.setOnClickListener(new View.OnClickListener() {
