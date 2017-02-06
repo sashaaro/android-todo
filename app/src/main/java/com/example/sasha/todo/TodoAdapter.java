@@ -14,7 +14,7 @@ import android.widget.TextView;
 /**
  * Created by Sasha on 06.02.2017.
  */
-class CustomAdapter extends BaseAdapter {
+class TodoAdapter extends BaseAdapter {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_SEPARATOR = 1;
@@ -24,7 +24,7 @@ class CustomAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
 
-    public CustomAdapter(Context context) {
+    public TodoAdapter(Context context) {
         mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
