@@ -17,6 +17,7 @@ public class MainActivity extends
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mAdapter = new TodoAdapter(this);
 
         for (int i = 1; i < 30; i++) {
