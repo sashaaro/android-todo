@@ -1,25 +1,24 @@
 package com.example.sasha.todo;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AddActivity extends
         //AppCompatActivity
         Activity
 {
 
-    private ArrayList<Category> categories = new ArrayList<Category>();
+    private ArrayList<Project> projects = new ArrayList<Project>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +26,9 @@ public class AddActivity extends
         setContentView(R.layout.activity_add);
 
         ImageButton backButton = (ImageButton) findViewById(R.id.back_button);
-        TextView headTextView = (TextView) findViewById(R.id.textSeparator);
-        ListView categoriesListView = (ListView) findViewById(R.id.categories_list);
+        TextView headTextView = (TextView) findViewById(R.id.todoSeparator);
+        //ListView projectsListView = (ListView) findViewById(R.id.projects_list);
+        Spinner projectsSpinnerView = (Spinner) findViewById(R.id.projects_spinner);
 
         headTextView.setText("Задача");
 
@@ -40,11 +40,17 @@ public class AddActivity extends
             }
         });
 
-        // load categories
+        ArrayList<Project> projects = new ArrayList<Project>();
 
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter();
-        categoriesAdapter.categories = categories;
-        categoriesListView.setAdapter(categoriesAdapter);
+        projects.add(new Project("Первый"));
+        projects.add(new Project("Второй"));
+        projects.add(new Project("Третьий проект"));
+
+        ArrayAdapter projectLisAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_item, projects);
+        //SpinnerAdapter projectLisAdapter = new Spinn
+        //projectsListView.setAdapter(projectLisAdapter);
+
+        projectsSpinnerView.setAdapter(projectLisAdapter);
 
         ImageButton saveButton = (ImageButton) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -55,35 +61,5 @@ public class AddActivity extends
                 // Snackbar.make(view, "Successfully save", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
-    }
-
-    private class CategoriesAdapter  extends BaseAdapter
-    {
-        public ArrayList<Category> categories = new ArrayList<Category>();
-
-        public Category selectedCategory;
-
-        @Override
-        public int getCount() {
-            return categories.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return categories.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return categories.indexOf(position);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            //
-
-            return null;
-        }
     }
 }

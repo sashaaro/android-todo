@@ -7,5 +7,5 @@ public class Todo {
     public Integer id;
     public String title;
     public Boolean isCompleted = false;
-    public Category category;
+    public Project project;
 }
