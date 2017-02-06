@@ -42,15 +42,6 @@ public class MainActivity extends ListActivity { // AppCompatActivity
         });*/
     }
 
-    /*holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            Todo totoInFocus = (Todo) buttonView.getTag();
-            if (totoInFocus.isCompleted == isChecked) return;
-
-        }
-    });*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
