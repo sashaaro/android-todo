@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -25,8 +26,38 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final Application application = (Application) this.getApplication();
 
         todoListAdapter = new TodoAdapter(this);
+        CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Todo todo = (Todo) buttonView.getTag();
+                System.out.println(todo);
+                System.out.println(buttonView);
+                if (todo.isCompleted == isChecked) {
+                    //Todo todo = new Todo(); // TODO get from checkbox
+
+                    JsonObject json = new JsonObject();
+                    json.addProperty("id", todo.id);
+                    json.addProperty("isCompleted", todo.isCompleted);
+
+                    application.ionLoadBuilder().load("https://oblakotodo.herokuapp.com/api/todo_change_status")
+                                        .setJsonObjectBody(json)
+                                        .asJsonObject()
+                                        /*.setCallback(new FutureCallback<JsonObject>() {
+                                            @Override
+                                            public void onCompleted(Exception e, JsonObject result) {
+                                                if (e != null) {
+                                                    // TODO
+                                                }
+                                            }
+                                        })*/
+                    ;
+                };
+
+            }
+        };
+        todoListAdapter.setListener(listener);
 
         setContentView(R.layout.activity_main);
         ListView listView = (ListView) findViewById(R.id.list_item);
@@ -48,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(clickListener);
 
-        Ion.with(this)
+        application.ionLoadBuilder()
             .load("https://oblakotodo.herokuapp.com/api/projects")
             .asJsonArray()
             .setCallback(new FutureCallback<JsonArray>() {

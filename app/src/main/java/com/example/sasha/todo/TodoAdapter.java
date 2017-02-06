@@ -12,6 +12,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
 /**
  * Created by Sasha on 06.02.2017.
  */
@@ -23,6 +27,7 @@ class TodoAdapter extends BaseAdapter {
     private ArrayList<String> mData = new ArrayList<String>();
     private TreeSet<Integer> sectionHeader = new TreeSet<Integer>();
 
+    private CompoundButton.OnCheckedChangeListener listener;
     private LayoutInflater mInflater;
 
     public TodoAdapter(Context context) {
@@ -79,6 +84,10 @@ class TodoAdapter extends BaseAdapter {
         return position;
     }
 
+    public void setListener(CompoundButton.OnCheckedChangeListener listener) {
+        this.listener = listener;
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         int rowType = getItemViewType(position);
@@ -91,16 +100,10 @@ class TodoAdapter extends BaseAdapter {
                     holder.textView = (TextView) convertView.findViewById(R.id.text);
 
                     holder.checkBox = (CheckBox) convertView.findViewById(R.id.cbBox);
+                    holder.checkBox.setChecked(true); // TODO
                     //holder.checkBox.setTag(position);
                     holder.checkBox.setTag(new Todo());
-                    holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            Todo totoInFocus = (Todo) buttonView.getTag();
-
-                            if (totoInFocus.isCompleted == isChecked) return;
-
-                        }
-                    });
+                    holder.checkBox.setOnCheckedChangeListener(this.listener);
 
                     break;
                 case TYPE_SEPARATOR:

@@ -1,5 +1,9 @@
 package com.example.sasha.todo;
 
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.builder.Builders;
+import com.koushikdutta.ion.builder.LoadBuilder;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -12,8 +16,10 @@ public class Application extends android.app.Application{
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("OpenSans-Light.ttf")
                 .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
-        //....
+                .build());
+    }
+
+    public LoadBuilder<Builders.Any.B> ionLoadBuilder(){
+        return Ion.with(this);
     }
 }
