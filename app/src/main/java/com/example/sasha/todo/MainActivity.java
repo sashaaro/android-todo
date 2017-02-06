@@ -9,8 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-public class MainActivity extends ListActivity { // AppCompatActivity
+public class MainActivity extends
+         AppCompatActivity
+        //ListActivity
+{
 
     private CustomAdapter mAdapter;
 
@@ -25,14 +29,18 @@ public class MainActivity extends ListActivity { // AppCompatActivity
                 mAdapter.addSectionHeaderItem("Section #" + i);
             }
         }
-        setListAdapter(mAdapter);
+        // setListAdapter(mAdapter);
 
-        /*
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ListView listView = (ListView) findViewById(R.id.list_item);
+        listView.setAdapter(mAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        toolBar.setTitle("Задачи");
+        // setSupportActionBar(toolbar);
+
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
