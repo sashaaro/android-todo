@@ -1,6 +1,7 @@
 package com.example.sasha.todo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeSet;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -28,12 +29,26 @@ class TodoAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void addItem(final String item) {
+    public void setList(ArrayList<Project> list) {
+        for(Iterator i = list.iterator(); i.hasNext();) {
+            Project project = (Project) i.next();
+            this.addSectionHeaderItem(project.title);
+            for(Iterator j = project.todos.iterator(); j.hasNext();) {
+                Todo todo = (Todo)j.next();
+                this.addItem(todo.title);
+            }
+        }
+        //notifyDataSetChanged();
+    }
+
+    protected void addItem(final String item) {
         mData.add(item);
         notifyDataSetChanged();
     }
 
-    public void addSectionHeaderItem(final String item) {
+
+
+    protected void addSectionHeaderItem(final String item) {
         mData.add(item);
         sectionHeader.add(mData.size() - 1);
         notifyDataSetChanged();

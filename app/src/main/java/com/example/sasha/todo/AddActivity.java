@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AddActivity extends
         //AppCompatActivity
@@ -48,8 +44,6 @@ public class AddActivity extends
         projects.add(new Project("Третьий проект"));
 
         ArrayAdapter projectLisAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_item, projects);
-        //SpinnerAdapter projectLisAdapter = new Spinn
-        //projectsListView.setAdapter(projectLisAdapter);
 
         projectsSpinnerView.setAdapter(projectLisAdapter);
 
