@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/systemWhiteColor"
+    android:padding="6dip" >
 
     <CheckBox
         android:id="@+id/cbBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </CheckBox>
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="CheckBox" />
+
     <TextView
         android:id="@+id/text"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FF000000" />
-</LinearLayout>
+        android:layout_alignBaseline="@+id/cbBox"
+        android:layout_alignBottom="@+id/cbBox"
+        android:layout_toRightOf="@+id/cbBox"
+        android:text="TextView" />
+
+</RelativeLayout>

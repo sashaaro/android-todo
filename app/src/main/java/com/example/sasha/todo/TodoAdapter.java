@@ -25,8 +25,7 @@ class TodoAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     public TodoAdapter(Context context) {
-        mInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void addItem(final String item) {
