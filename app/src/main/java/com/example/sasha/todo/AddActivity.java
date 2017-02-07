@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 
 // TODO rename class more suitable
@@ -41,7 +44,7 @@ public class AddActivity extends
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.finish(); // back to previously activity
+                activity.finish(); // back to previously activityR
             }
         });
 
@@ -74,8 +77,23 @@ public class AddActivity extends
 
                 repository.persistTodo(todo, new Repository.TodoCallback() {
                     @Override
-                    public void execute(Todo todo) {
-                        activity.finish(); // back to previously activity
+                    public void execute(Todo todo, JsonObject errors) {
+                        if (todo.id != null) { // successfully save
+                            activity.finish(); // back to previously activity
+
+                            // TODO update todoList. notification
+
+                        } else if (errors.isJsonObject()) {
+                            JsonElement textErrorElement = errors.get("text");
+                            if (textErrorElement.isJsonArray()) {
+                                String error = textErrorElement.getAsJsonArray().get(0).getAsString();
+                                todoTextView.setError(error);
+                            }
+
+                            // TODO check project
+                        } else {
+                            // wtf?!
+                        }
 
                         // Snackbar.make(view, "Созранено", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }

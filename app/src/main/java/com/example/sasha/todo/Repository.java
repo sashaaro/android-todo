@@ -87,20 +87,27 @@ public class Repository {
                     .setCallback(new FutureCallback<JsonObject>() {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
-                            System.out.println(result);
-
+                            JsonObject errors = null;
                             if (e == null) {
-                                Integer ID = result.get("id").getAsInt();
-                                todo.id = ID;
-                                JsonElement isCompleted = result.get("isCompleted");
-                                if (!isCompleted.isJsonNull()) {
-                                    todo.isCompleted = isCompleted.getAsBoolean();
+                                JsonElement IDElement = result.get("id");
+                                JsonElement errorsElement = result.get("errors");
+                                if (IDElement == null || IDElement.isJsonNull()) {
+                                    if (errorsElement.isJsonObject()) {
+                                        errors = errorsElement.getAsJsonObject();
+                                    }
+                                } else {
+                                    Integer ID = result.get("id").getAsInt();
+                                    todo.id = ID;
+                                    JsonElement isCompleted = result.get("isCompleted");
+                                    if (!isCompleted.isJsonNull()) {
+                                        todo.isCompleted = isCompleted.getAsBoolean();
+                                    }
+                                    todo.title = result.get("text").getAsString();
+
+                                    // TODO full todo.project
                                 }
-                                todo.title = result.get("text").getAsString();
 
-                                // TODO full todo.project
-
-                                callback.execute(todo);
+                                callback.execute(todo, errors);
                             } else {
                                 // TODO
                                 System.out.println(e.getMessage());
@@ -120,6 +127,6 @@ public class Repository {
     }
 
     public interface TodoCallback {
-        public void execute(Todo todo);
+        public void execute(Todo todo, JsonObject errors);
     }
 }
