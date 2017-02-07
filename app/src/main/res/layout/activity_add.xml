@@ -39,8 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="Новая задача"
                 android:textSize="20dp"
-                android:layout_gravity="center"
-                android:id="@+id/toolbar_title" />
+                android:layout_gravity="center" />
 
             <ImageButton
                 android:scaleType="fitCenter"
@@ -60,6 +59,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/form" />
+    <include layout="@layout/form" android:id="@+id/include_form" />
 
 </android.support.design.widget.CoordinatorLayout>

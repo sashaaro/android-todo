@@ -10,8 +10,8 @@ public class Project {
     public String title;
     public ArrayList<Todo> todos = new ArrayList<Todo>();
 
-    public Project(String title) {
-        this.title = title;
+    public Project(Integer id) {
+        this.id = id;
     }
 
     public String toString() {

@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         RelativeLayout todoListLayout = (RelativeLayout) findViewById(R.id.include_todo_list);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) todoListLayout.findViewById(R.id.swiperefresh);
 
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) todoListLayout.findViewById(R.id.swiperefresh);
         final ExpandableListView listView = (ExpandableListView) swipeRefreshLayout.findViewById(R.id.todo_list);
 
 

@@ -19,7 +19,7 @@ public class CheckboxCheckedListener implements CompoundButton.OnCheckedChangeLi
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-        todo.isCompleted = isChecked;
+        this.todo.isCompleted = isChecked;
         persistTodo();
     }
 
@@ -27,7 +27,8 @@ public class CheckboxCheckedListener implements CompoundButton.OnCheckedChangeLi
         JsonObject json = new JsonObject();
         json.addProperty("id", this.todo.id);
         json.addProperty("isCompleted", this.todo.isCompleted);
-        this.application.ionLoadBuilder().load("https://oblakotodo.herokuapp.com/api/todo_change_status")
+        this.application.ionLoadBuilder()
+                .load("https://oblakotodo.herokuapp.com/api/todo_change_status")
                 .setJsonObjectBody(json)
                 .asJsonObject();
     }
