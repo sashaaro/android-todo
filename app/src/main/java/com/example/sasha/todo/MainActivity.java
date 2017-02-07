@@ -1,20 +1,27 @@
 package com.example.sasha.todo;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.CompoundButton;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SimpleExpandableListAdapter;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -22,13 +29,14 @@ public class MainActivity extends AppCompatActivity
 {
 
     private TodoAdapter todoListAdapter;
+    private ArrayList<Project> projects = new ArrayList<Project>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Application application = (Application) this.getApplication();
 
-        todoListAdapter = new TodoAdapter(this);
+        todoListAdapter = new TodoAdapter(this, this.projects);
         CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Todo todo = (Todo) buttonView.getTag();
@@ -57,11 +65,18 @@ public class MainActivity extends AppCompatActivity
 
             }
         };
-        todoListAdapter.setListener(listener);
+        //todoListAdapter.setListener(listener);
+
+        //adapter = new SimpleExpandableListAdapter(this);
 
         setContentView(R.layout.activity_main);
-        ListView listView = (ListView) findViewById(R.id.list_item);
-        listView.setAdapter(todoListAdapter);
+        //ListView listView = (ListView) findViewById(R.id.list_item);
+        //listView.setAdapter(todoListAdapter);
+        RelativeLayout todoListLayout = (RelativeLayout) findViewById(R.id.include_todo_list11);
+
+        ExpandableListView listView = (ExpandableListView) todoListLayout.findViewById(R.id.todo_list);
+
+        listView.setAdapter(this.todoListAdapter);
 
         ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
 
@@ -79,6 +94,8 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(clickListener);
 
+        final ArrayList<Project> projects = this.projects;
+
         application.ionLoadBuilder()
             .load("https://oblakotodo.herokuapp.com/api/projects")
             .asJsonArray()
@@ -86,7 +103,6 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onCompleted(Exception e, JsonArray result) {
                     if (e == null) {
-                        ArrayList<Project> projects = new ArrayList<Project>();
 
                         for(Iterator i = result.iterator(); i.hasNext();) {
                             JsonObject item = (JsonObject) i.next();
@@ -104,7 +120,9 @@ public class MainActivity extends AppCompatActivity
                             projects.add(project);
                         }
                         // TODO try catch NullPointerException
-                        todoListAdapter.setList(projects);
+                        System.out.println(projects);
+                        System.out.println(projects.size());
+                        todoListAdapter.notifyDataSetChanged();
                         // todoListAdapter.addSectionHeaderItem("Section #" + i);
 
                     } else {

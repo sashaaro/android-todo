@@ -1,129 +1,98 @@
 package com.example.sasha.todo;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.TreeSet;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import java.util.ArrayList;
+
 
 /**
  * Created by Sasha on 06.02.2017.
  */
-class TodoAdapter extends BaseAdapter {
+class TodoAdapter extends BaseExpandableListAdapter {
+    private Context context;
+    private ArrayList<Project> list;
 
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_SEPARATOR = 1;
-
-    private ArrayList<String> mData = new ArrayList<String>();
-    private TreeSet<Integer> sectionHeader = new TreeSet<Integer>();
-
-    private CompoundButton.OnCheckedChangeListener listener;
-    private LayoutInflater mInflater;
-
-    public TodoAdapter(Context context) {
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public TodoAdapter(Context context, ArrayList<Project> list) {
+        this.context = context;
+        this.list = list;
     }
 
-    public void setList(ArrayList<Project> list) {
-        for(Iterator i = list.iterator(); i.hasNext();) {
-            Project project = (Project) i.next();
-            this.addSectionHeaderItem(project.title);
-            for(Iterator j = project.todos.iterator(); j.hasNext();) {
-                Todo todo = (Todo)j.next();
-                this.addItem(todo.title);
-            }
+    @Override
+    public int getGroupCount() {
+        return this.list.size();
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return this.list.get(groupPosition).todos.size();
+    }
+
+    @Override
+    public Project getGroup(int groupPosition) {
+        return this.list.get(groupPosition);
+    }
+
+    @Override
+    public Todo getChild(int groupPosition, int childPosition) {
+        return this.list.get(groupPosition).todos.get(childPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return this.list.get(groupPosition).id;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return this.list.get(groupPosition).todos.get(childPosition).id;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        Project project = (Project)getGroup(groupPosition);
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.head, null);
         }
-        //notifyDataSetChanged();
-    }
+        TextView lblListHeader = (TextView)convertView.findViewById(R.id.textSeparator);
+        lblListHeader.setTypeface(null, Typeface.BOLD);
+        lblListHeader.setText(project.title);
+        //lblListHeader.set
 
-    protected void addItem(final String item) {
-        mData.add(item);
-        notifyDataSetChanged();
-    }
-
-
-
-    protected void addSectionHeaderItem(final String item) {
-        mData.add(item);
-        sectionHeader.add(mData.size() - 1);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return sectionHeader.contains(position) ? TYPE_SEPARATOR : TYPE_ITEM;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return 2;
-    }
-
-    @Override
-    public int getCount() {
-        return mData.size();
-    }
-
-    @Override
-    public String getItem(int position) {
-        return mData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    public void setListener(CompoundButton.OnCheckedChangeListener listener) {
-        this.listener = listener;
-    }
-
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        int rowType = getItemViewType(position);
-
-        if (convertView == null) {
-            holder = new ViewHolder();
-            switch (rowType) {
-                case TYPE_ITEM:
-                    convertView = mInflater.inflate(R.layout.item, null);
-                    holder.textView = (TextView) convertView.findViewById(R.id.text);
-
-                    holder.checkBox = (CheckBox) convertView.findViewById(R.id.cbBox);
-                    holder.checkBox.setChecked(true); // TODO
-                    //holder.checkBox.setTag(position);
-                    holder.checkBox.setTag(new Todo());
-                    holder.checkBox.setOnCheckedChangeListener(this.listener);
-
-                    break;
-                case TYPE_SEPARATOR:
-                    convertView = mInflater.inflate(R.layout.head, null);
-                    holder.textView = (TextView) convertView.findViewById(R.id.textSeparator);
-                    break;
-            }
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        holder.textView.setText(mData.get(position));
+        ExpandableListView mExpandableListView = (ExpandableListView) parent;
+        mExpandableListView.expandGroup(groupPosition);
 
         return convertView;
     }
 
-    public static class ViewHolder {
-        public TextView textView;
-        public CheckBox checkBox;
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        final Todo todo = (Todo)getChild(groupPosition,childPosition);
+        if(convertView == null)
+        {
+            LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.list_item, null);
+        }
+
+        TextView txtListChild = (TextView)convertView.findViewById(R.id.lblListItem);
+        txtListChild.setText(todo.title);
+        return convertView;
     }
 
-}
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return false;
+    }
+};
