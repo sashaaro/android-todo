@@ -1,12 +1,16 @@
 package com.example.sasha.todo;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -100,11 +104,37 @@ class TodoAdapter extends BaseExpandableListAdapter {
         checkBox.setOnCheckedChangeListener(this.checkboxCheckedListener);
 
         txtListChild.setText(todo.title);
+
+
+        ChainOnCheckedChangeListener chainOnCheckedChangeListener = new ChainOnCheckedChangeListener(); // for multiple setting eventListeners
+        chainOnCheckedChangeListener.registerListener(this.checkboxCheckedListener);
+
+        TextCheckboxCheckedListener textCheckboxCheckedListener = new TextCheckboxCheckedListener(txtListChild);
+        chainOnCheckedChangeListener.registerListener(textCheckboxCheckedListener);
+        checkBox.setOnCheckedChangeListener(chainOnCheckedChangeListener);
+
+
+        textCheckboxCheckedListener.onCheckedChanged(checkBox, checkBox.isChecked());// fire event
+
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    public class TextCheckboxCheckedListener  implements CompoundButton.OnCheckedChangeListener {
+
+        private TextView txtListChild;
+
+        public TextCheckboxCheckedListener(TextView txtListChild)
+        {
+            this.txtListChild = txtListChild;
+        }
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            txtListChild.setPaintFlags(isChecked ? Paint.STRIKE_THRU_TEXT_FLAG : Paint.ANTI_ALIAS_FLAG);
+        }
     }
 };
