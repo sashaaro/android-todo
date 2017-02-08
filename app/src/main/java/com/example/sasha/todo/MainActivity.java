@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity
 
         final Application application = (Application) this.getApplication();
         final Repository repository = new Repository(application);
-        final TodoAdapter todoListAdapter = new TodoAdapter(this, application);
+        final TodoAdapter todoListAdapter = new TodoAdapter(this, new CheckboxCheckedListener(repository));
 
         repository.findProjectsAll(new Repository.ProjectsCallback() {
             @Override

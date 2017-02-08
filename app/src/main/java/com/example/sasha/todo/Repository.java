@@ -21,6 +21,7 @@ public class Repository {
     }
 
     /**
+     * Async get projects
      * @TODO caching?!
      * @param callback
      */
@@ -64,7 +65,19 @@ public class Repository {
                 });
     }
 
+    public void persistTodoStatus (Todo todo) {
+        JsonObject json = new JsonObject();
+        json.addProperty("id", todo.id);
+        json.addProperty("isCompleted", todo.isCompleted);
+
+        this.application.ionLoadBuilder()
+                .load(API_URL + "/todo_change_status")
+                .setJsonObjectBody(json)
+                .asJsonObject();
+    }
+
     /**
+     * Async save todo
      * @TODO use that method
      * @param todo
      */

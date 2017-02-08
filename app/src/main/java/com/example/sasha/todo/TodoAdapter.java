@@ -19,11 +19,11 @@ import java.util.ArrayList;
 class TodoAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<Project> list = new ArrayList<Project>();
-    private Application application;
+    private CheckboxCheckedListener checkboxCheckedListener;
 
-    public TodoAdapter(Context context, Application application) {
+    public TodoAdapter(Context context, CheckboxCheckedListener checkboxCheckedListener) {
         this.context = context;
-        this.application = application;
+        this.checkboxCheckedListener = checkboxCheckedListener;
     }
 
     public TodoAdapter setList(ArrayList<Project> list) {
@@ -87,7 +87,7 @@ class TodoAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Todo todo = (Todo)getChild(groupPosition,childPosition);
+        final Todo todo = (Todo)getChild(groupPosition, childPosition);
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item, null);
@@ -96,7 +96,8 @@ class TodoAdapter extends BaseExpandableListAdapter {
         TextView txtListChild = (TextView)convertView.findViewById(R.id.lblListItem);
         CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.cbBox);
         checkBox.setChecked(todo.isCompleted);
-        checkBox.setOnCheckedChangeListener(new CheckboxCheckedListener(todo, this.application));
+        checkBox.setTag(todo);
+        checkBox.setOnCheckedChangeListener(this.checkboxCheckedListener);
 
         txtListChild.setText(todo.title);
         return convertView;

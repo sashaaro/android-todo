@@ -1,5 +1,6 @@
 package com.example.sasha.todo;
 
+import android.support.v7.widget.AppCompatCheckBox;
 import android.widget.CompoundButton;
 
 import com.google.gson.JsonObject;
@@ -9,27 +10,18 @@ import com.google.gson.JsonObject;
  */
 public class CheckboxCheckedListener implements CompoundButton.OnCheckedChangeListener
 {
-    private Todo todo;
-    private Application application;
+    private Repository repository;
 
-    public CheckboxCheckedListener(Todo todo, Application application){
-        this.todo = todo;
-        this.application = application;
+    public CheckboxCheckedListener(Repository repository){
+        this.repository = repository;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-        this.todo.isCompleted = isChecked;
-        persistTodo();
-    }
+        AppCompatCheckBox checkBox = (AppCompatCheckBox)buttonView;
+        Todo todo = (Todo) checkBox.getTag();
 
-    private void persistTodo() {
-        JsonObject json = new JsonObject();
-        json.addProperty("id", this.todo.id);
-        json.addProperty("isCompleted", this.todo.isCompleted);
-        this.application.ionLoadBuilder()
-                .load("https://oblakotodo.herokuapp.com/api/todo_change_status")
-                .setJsonObjectBody(json)
-                .asJsonObject();
+        todo.isCompleted = isChecked;
+        this.repository.persistTodoStatus(todo);
     }
 }
