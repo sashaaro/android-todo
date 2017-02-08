@@ -14,24 +14,17 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
+    Application application;
+    Repository repository;
+    TodoAdapter todoListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Application application = (Application) this.getApplication();
-        final Repository repository = new Repository(application);
-        final TodoAdapter todoListAdapter = new TodoAdapter(this, new CheckboxCheckedListener(repository));
-
-        repository.findProjectsAll(new Repository.ProjectsCallback() {
-            @Override
-            public void execute(ArrayList<Project> projects) {
-                // TODO try catch NullPointerException
-
-                todoListAdapter
-                    .setList(projects)
-                    .notifyDataSetChanged();
-            }
-        });
+        application = (Application) this.getApplication();
+        repository = new Repository(application);
+        todoListAdapter = new TodoAdapter(this, new CheckboxCheckedListener(repository));
 
         setContentView(R.layout.activity_main);
 
@@ -40,8 +33,6 @@ public class MainActivity extends AppCompatActivity
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) todoListLayout.findViewById(R.id.swiperefresh);
         final ExpandableListView listView = (ExpandableListView) swipeRefreshLayout.findViewById(R.id.todo_list);
 
-
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -49,7 +40,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void execute(ArrayList<Project> projects) {
                         // TODO try catch NullPointerException
-
                         todoListAdapter
                                 .setList(projects)
                                 .notifyDataSetChanged();
@@ -64,6 +54,7 @@ public class MainActivity extends AppCompatActivity
         listView.setAdapter(todoListAdapter);
 
         ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
@@ -74,8 +65,27 @@ public class MainActivity extends AppCompatActivity
         };
 
         addButton.setOnClickListener(clickListener);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(clickListener);
+
+        this.refreshTodoList();
+    }
+
+    private void refreshTodoList() {
+        repository.findProjectsAll(new Repository.ProjectsCallback() {
+            @Override
+            public void execute(ArrayList<Project> projects) {
+                // TODO try catch NullPointerException
+                todoListAdapter
+                        .setList(projects)
+                        .notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        this.refreshTodoList();
     }
 }

@@ -66,6 +66,8 @@ public class AddActivity extends
         });
 
         ImageButton saveButton = (ImageButton) findViewById(R.id.save_button);
+
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
