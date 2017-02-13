@@ -92,29 +92,29 @@ class TodoAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Todo todo = (Todo)getChild(groupPosition, childPosition);
+
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item, null);
+
+            CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.cbBox);
+            TextView txtListChild = (TextView)convertView.findViewById(R.id.lblListItem);
+
+            checkBox.setTag(todo);
+            checkBox.setChecked(todo.isCompleted);
+
+            txtListChild.setText(todo.title);
+
+            ChainOnCheckedChangeListener chainOnCheckedChangeListener = new ChainOnCheckedChangeListener(); // for multiple setting eventListeners
+            chainOnCheckedChangeListener.registerListener(this.checkboxCheckedListener);
+
+            TextCheckboxCheckedListener textCheckboxCheckedListener = new TextCheckboxCheckedListener(txtListChild);
+            chainOnCheckedChangeListener.registerListener(textCheckboxCheckedListener);
+            checkBox.setOnCheckedChangeListener(chainOnCheckedChangeListener);
+
+
+            textCheckboxCheckedListener.onCheckedChanged(checkBox, checkBox.isChecked());// fire event
         }
-
-        TextView txtListChild = (TextView)convertView.findViewById(R.id.lblListItem);
-        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.cbBox);
-        checkBox.setChecked(todo.isCompleted);
-        checkBox.setTag(todo);
-        checkBox.setOnCheckedChangeListener(this.checkboxCheckedListener);
-
-        txtListChild.setText(todo.title);
-
-
-        ChainOnCheckedChangeListener chainOnCheckedChangeListener = new ChainOnCheckedChangeListener(); // for multiple setting eventListeners
-        chainOnCheckedChangeListener.registerListener(this.checkboxCheckedListener);
-
-        TextCheckboxCheckedListener textCheckboxCheckedListener = new TextCheckboxCheckedListener(txtListChild);
-        chainOnCheckedChangeListener.registerListener(textCheckboxCheckedListener);
-        checkBox.setOnCheckedChangeListener(chainOnCheckedChangeListener);
-
-
-        textCheckboxCheckedListener.onCheckedChanged(checkBox, checkBox.isChecked());// fire event
 
         return convertView;
     }

@@ -70,8 +70,6 @@ public class Repository {
         json.addProperty("id", todo.id);
         json.addProperty("isCompleted", todo.isCompleted);
 
-        System.out.println(json);
-
         this.application.ionLoadBuilder()
                 .load(API_URL + "/todo_change_status")
                 .setJsonObjectBody(json)
