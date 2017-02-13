@@ -91,11 +91,11 @@ class TodoAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Todo todo = (Todo)getChild(groupPosition, childPosition);
-
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item, null);
+
+            final Todo todo = (Todo)getChild(groupPosition, childPosition);
 
             CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.cbBox);
             TextView txtListChild = (TextView)convertView.findViewById(R.id.lblListItem);
